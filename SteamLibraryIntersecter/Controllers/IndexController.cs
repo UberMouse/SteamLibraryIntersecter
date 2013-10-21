@@ -4,6 +4,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Configuration;
 using System.Web.Mvc;
+using SteamLibraryIntersecter.DAL;
+using SteamLibraryIntersecter.Models;
 using SteamLibraryIntersecter.Ninject;
 using SteamLibraryIntersecter.Steam;
 

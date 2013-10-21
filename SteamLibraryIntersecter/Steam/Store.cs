@@ -5,6 +5,8 @@ using System.Linq;
 using System.Web;
 using EasyHttp.Http;
 using Newtonsoft.Json;
+using SteamLibraryIntersecter.DAL;
+using SteamLibraryIntersecter.Models;
 using SteamLibraryIntersecter.Steam.Entities;
 
 namespace SteamLibraryIntersecter.Steam
@@ -30,21 +32,38 @@ namespace SteamLibraryIntersecter.Steam
             if(appIds.Any(x => !x.IsNumerical())) throw new ArgumentException(string.Format("The following AppIds are malformed: {0}", 
                                                                                             string.Join(",", 
                                                                                                         appIds.Where(x => !x.IsNumerical()))));
+            var existingGames = new List<Game>();
+            using (var dal = new Dal())
+            {
+                var dbGames = dal.RetrieveGames(appIds);
+                existingGames.AddRange(dbGames.Select(SteamGame.ToGame));
+
+                appIds = appIds.Where(x => existingGames.All(y => y.AppId != x)).OrderBy(int.Parse).ToArray();
+            }
+
             var groupedIds = appIds.Select((i, index) => new
                                                          {
                                                              i,
                                                              index
+               
                                                          }).GroupBy(group => group.index / 50, element => element.i);
-
-            foreach(var group in groupedIds)
+            var retrievedGames = new List<Game>(200);
+            
+            foreach (var group in groupedIds)
             {
                 var ids = group.ToList();
                 var response = _httpClient.Get(API_ENDPOINT + string.Join(",", ids)).RawText;
                 var parsedJson = JsonConvert.DeserializeObject<Dictionary<string, StoreApiResponse>>(response);
 
-                foreach(var id in ids)
-                    yield return _parseGame(parsedJson[id], id);
+                foreach (var id in ids)
+                    retrievedGames.Add(_parseGame(parsedJson[id], id));
             }
+            using (var dal = new Dal())
+            {
+                dal.InsertGames(retrievedGames.Where(x => x.Success).Select(SteamGame.FromGame).ToArray());
+            }
+            existingGames.AddRange(retrievedGames);
+            return existingGames;
         }
 
         private Game _parseGame(StoreApiResponse appInfo, string appId)
