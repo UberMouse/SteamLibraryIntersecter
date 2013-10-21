@@ -28,7 +28,10 @@ namespace SteamLibraryIntersecter.Controllers
             var firstPlayer = community.GetUserInfo(firstSteamId);
             var secondPlayer = community.GetUserInfo(secondSteamId);
 
-            var coopGames = firstPlayer.IntersectLibrary(secondPlayer).Where(x => x.Coop);
+            var coopGames = firstPlayer.IntersectLibrary(secondPlayer)
+                                       .Where(x => x.Coop)
+                                       .GroupBy(x => x.Name)
+                                       .Select(x => x.First());
 
             return View("DisplayIntersection", coopGames);
         }
