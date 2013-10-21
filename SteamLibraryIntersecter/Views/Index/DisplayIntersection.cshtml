@@ -1,0 +1,14 @@
+﻿@model System.Collections.Generic.IEnumerable<SteamLibraryIntersecter.Steam.Entities.Game>
+
+@{
+    ViewBag.Title = "Library Intersection";
+    Layout = "Index.cshtml";
+}
+
+<h2>Library Intersection</h2>
+
+
+    @foreach (var game in Model.ToList())
+    {
+        @game.ToString();<br/>
+    }
