@@ -15,7 +15,7 @@ namespace SteamLibraryIntersecter
 
             routes.MapRoute(
                 name: "DisplayIntersection",
-                url: "DisplayIntersection/{firstSteamId}/{secondSteamId}",
+                url: "DisplayIntersection/{firstSteamId},{secondSteamId}",
                 defaults: new { controller = "Index", action = "DisplayIntersection", firstSteamId = @"\d", secondSteamId = @"\d" }
             );
 

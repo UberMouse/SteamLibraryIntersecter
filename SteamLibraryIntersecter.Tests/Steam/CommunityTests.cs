@@ -51,5 +51,19 @@ namespace SteamLibraryIntersecter.Tests.Steam
         {
             community.GetUserInfo("1234a");
         }
+
+        [TestMethod]
+        public void ResolveVanityUrlReturnsCorrectSteamId()
+        {
+            Assert.AreEqual(community.ResolveVanityUrl("ubermouse"), "76561197994157624");
+            Assert.AreEqual(community.ResolveVanityUrl("flyboy95"), "76561197996719044");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void ResolveVanityUrlThrowsArgumentExceptionOnInvalidVanityUrl()
+        {
+            community.ResolveVanityUrl("fakevanityurl");
+        }
     }
 }

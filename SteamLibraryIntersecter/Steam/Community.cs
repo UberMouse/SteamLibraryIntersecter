@@ -24,6 +24,15 @@ namespace SteamLibraryIntersecter.Steam
             _httpClient = httpClient;
         }
 
+        public string ResolveVanityUrl(string vanityurl)
+        {
+            const string API_URL = "http://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key=BE2DC879B4DFE16B0F428080031D7FF8&format=json&vanityurl=";
+            var response = _httpClient.Get(API_URL + vanityurl).DynamicBody.response;
+
+            if (response.success != 1) throw new ArgumentException(response.message);
+            return response.steamid;
+        }
+
         public Player GetUserInfo(string steamId)
         {
             if(steamId == null) throw new ArgumentNullException();

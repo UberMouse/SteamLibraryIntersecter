@@ -25,6 +25,9 @@ namespace SteamLibraryIntersecter.Controllers
         {
             var community = NinjectCore.Get<Community>();
 
+            if (!firstSteamId.IsNumerical()) firstSteamId = community.ResolveVanityUrl(firstSteamId);
+            if (!secondSteamId.IsNumerical()) secondSteamId = community.ResolveVanityUrl(secondSteamId);
+
             var firstPlayer = community.GetUserInfo(firstSteamId);
             var secondPlayer = community.GetUserInfo(secondSteamId);
 
