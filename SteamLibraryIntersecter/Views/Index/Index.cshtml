@@ -1,7 +1,16 @@
 ﻿@{
     ViewBag.Title = "Index";
 }
+<html>
+    <head>
+        <title>@ViewBag.Title</title>
+        <link rel="stylesheet" href="~/assets/bootstrap/css/bootstrap.min.css" type="text/css"/>   
+        <link rel="stylesheet" href="~/assets/darkstrap.min.css" type="text/css" />  
+    </head>
+    <body>
+        @RenderBody()
+        
+        <script src="~/assets/bootstrap/js/bootstrap.min.js"></script>    
+    </body>
+</html>
 
-<h2>Index</h2>
-
-@RenderBody()

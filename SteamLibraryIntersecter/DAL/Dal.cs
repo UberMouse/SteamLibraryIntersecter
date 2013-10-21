@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Web;
 using MongoDB.Bson;
@@ -46,7 +47,7 @@ namespace SteamLibraryIntersecter.DAL
 
         private MongoCollection<SteamGame> GetGamesCollection()
         {
-            var client = new MongoClient(connectionString);
+            var client = (ConfigurationManager.AppSettings["onAzure"] == "true") ? new MongoClient(connectionString) : new MongoClient();
 
             var database = client.GetServer()[dbName];
             return database.GetCollection<SteamGame>(collectionName);

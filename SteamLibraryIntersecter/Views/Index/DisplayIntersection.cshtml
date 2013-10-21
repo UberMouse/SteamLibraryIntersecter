@@ -5,10 +5,41 @@
     Layout = "Index.cshtml";
 }
 
-<h2>Library Intersection</h2>
-
-
-    @foreach (var game in Model.ToList())
-    {
-        @game.ToString();<br/>
-    }
+<div class="container">
+    <h2>Library Intersection</h2>
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <td>Name</td>
+                <td>Coop</td>
+                <td>Multiplayer</td>
+                <td>Store Page</td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var game in Model.ToList())
+            {
+                <tr>
+                    <td>@game.Name</td>
+                    @if (game.Coop)
+                    {
+                        <td style="background-color: #5bb75b">Yes</td>
+                    }
+                    else
+                    {
+                        <td style="background-color: #fc5b5e">No</td>
+                    }
+                    @if (game.Multiplayer)
+                    {
+                        <td style="background-color: #5bb75b">Yes</td>
+                    }
+                    else
+                    {
+                        <td style="background-color: #fc5b5e">No</td>
+                    }
+                    <td><a href="http://store.steampowered.com/app/@game.AppId">Link</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
