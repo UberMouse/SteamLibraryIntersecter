@@ -1,16 +1,16 @@
 ﻿@{
     ViewBag.Title = "Index";
+    Layout = "_Index.cshtml";
 }
-<html>
-    <head>
-        <title>@ViewBag.Title</title>
-        <link rel="stylesheet" href="~/assets/bootstrap/css/bootstrap.min.css" type="text/css"/>   
-        <link rel="stylesheet" href="~/assets/darkstrap.min.css" type="text/css" />  
-    </head>
-    <body>
-        @RenderBody()
-        
-        <script src="~/assets/bootstrap/js/bootstrap.min.js"></script>    
-    </body>
-</html>
 
+<div class="container">
+    <h3>Enter steamids to intersect, one per line. Custom profile names are also accepted</h3>
+    <div class="span6 center">
+        @using (Html.BeginForm("DisplayIntersection", "Index"))
+        {
+            <textarea cols="50" rows="10" name="steamIds"></textarea>
+            <br/>
+            <input type="submit" value="Intersect" />
+        }
+    </div>
+</div>

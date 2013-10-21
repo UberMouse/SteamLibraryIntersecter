@@ -8,6 +8,7 @@ using SteamLibraryIntersecter.DAL;
 using SteamLibraryIntersecter.Models;
 using SteamLibraryIntersecter.Ninject;
 using SteamLibraryIntersecter.Steam;
+using SteamLibraryIntersecter.Steam.Entities;
 
 namespace SteamLibraryIntersecter.Controllers
 {
@@ -21,20 +22,19 @@ namespace SteamLibraryIntersecter.Controllers
             return View();
         }
 
-        public ViewResult DisplayIntersection(string firstSteamId, string secondSteamId)
+        public ViewResult DisplayIntersection(string steamIds)
         {
             var community = NinjectCore.Get<Community>();
 
-            if (!firstSteamId.IsNumerical()) firstSteamId = community.ResolveVanityUrl(firstSteamId);
-            if (!secondSteamId.IsNumerical()) secondSteamId = community.ResolveVanityUrl(secondSteamId);
+            var players = steamIds.Split(new[] {"\n", "\r\n"}, StringSplitOptions.RemoveEmptyEntries)
+                                  .Select(x => (x.IsNumerical()) ? x : community.ResolveVanityUrl(x))
+                                  .Select(community.GetUserInfo);
 
-            var firstPlayer = community.GetUserInfo(firstSteamId);
-            var secondPlayer = community.GetUserInfo(secondSteamId);
-
-            var coopGames = firstPlayer.IntersectLibrary(secondPlayer)
-                                       .Where(x => x.Coop)
-                                       .GroupBy(x => x.Name)
-                                       .Select(x => x.First());
+            var coopGames = players.First()
+                                   .IntersectLibrary(players.Skip(1).ToArray())
+                                   .Where(x => x.Coop)
+                                   .GroupBy(x => x.Name)
+                                   .Select(x => x.First());
 
             return View("DisplayIntersection", coopGames);
         }

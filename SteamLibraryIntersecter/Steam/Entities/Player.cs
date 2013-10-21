@@ -13,9 +13,9 @@ namespace SteamLibraryIntersecter.Steam.Entities
             return string.Format("SteamId: {0}", SteamId);
         }
 
-        public IEnumerable<Game> IntersectLibrary(Player other)
+        public IEnumerable<Game> IntersectLibrary(params Player[] players)
         {
-            return other.Games.Where(Games.Contains);
+            return players.Aggregate(Games as IEnumerable<Game>, (current, player) => current.Where(x => player.Games.Contains(x)));
         }
 
         public bool Equals(Player other)
