@@ -19,7 +19,7 @@ namespace SteamLibraryIntersecter.DAL
         private string connectionString = System.Environment.GetEnvironmentVariable("CUSTOMCONNSTR_MONGOLAB_URI");
 
 
-        private string dbName = "steamLibraryIntersecter";
+        private string dbName = "MongoLab-ec";
         private string collectionName = "Games";
 
 
